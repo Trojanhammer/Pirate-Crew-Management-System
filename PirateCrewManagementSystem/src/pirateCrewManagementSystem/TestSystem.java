@@ -15,8 +15,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.stage.Modality;
 
 public class TestSystem extends Application {
@@ -32,6 +32,7 @@ public class TestSystem extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // Initialize text fields and stage
         nameField = new TextField();
         ageField = new TextField();
         roleField = new TextField();
@@ -39,31 +40,36 @@ public class TestSystem extends Application {
         fruitNameField = new TextField();
         fruitTypeField = new TextField();
         Stage introStage = new Stage();
+
+        // Create introduction stage elements
         Label introLabel = new Label("Welcome to the Pirate Crew Management System!");
         introLabel.setStyle("-fx-font-weight: bold; -fx-font-style: italic;");
         Button nextButton = new Button("Next");
         introStage.initModality(Modality.APPLICATION_MODAL);
         introStage.setTitle("Introduction");
+
+        // Set up intro stage image view and gif
         Image introImage = new Image(getClass().getResourceAsStream("Image/introstage.png"));
         ImageView imageView = new ImageView(introImage);
         Image gifImage = new Image(getClass().getResourceAsStream("Image/strawhat02.gif"));
         ImageView gifImageView = new ImageView(gifImage);
-
         gifImageView.setFitWidth(600);
         gifImageView.setFitHeight(300);
-
         Group gifPane = new Group(gifImageView);
 
+        // Handle next button action
         nextButton.setOnAction(event -> {
             primaryStage.show(); // Show the main stage
             introStage.close(); // Close the intro stage
+
             // Play audio after the intro stage is closed
             AudioClip audioClip = new AudioClip(getClass().getResource("Audio/Onepiece.mp3").toString());
-            //audioClip.play();
+           // audioClip.play();
         });
 
+        // Set up intro stage layout
         VBox introLayout = new VBox(imageView, introLabel, nextButton);
-        introLayout.setStyle("-fx-background-color: lightblue;");
+        introLayout.setStyle("-fx-background-color: grey;");
         introLayout.setAlignment(Pos.CENTER);
         introLayout.setSpacing(15);
         introLayout.setPadding(new Insets(50));
@@ -71,11 +77,13 @@ public class TestSystem extends Application {
         Scene introScene = new Scene(introLayout, 500, 500);
         introStage.setScene(introScene);
 
+        // Create buttons and root layout
         Button addButton = new Button("Add Crew Member");
         Button viewButton = new Button("View Crew Member");
         VBox root = new VBox(addButton, viewButton);
         root2 = new VBox(viewButton);
 
+        // Handle add button action
         addButton.setOnAction((ActionEvent e) -> {
             // Perform add operation
             name = nameField.getText().toLowerCase();
@@ -109,6 +117,7 @@ public class TestSystem extends Application {
             }
         });
 
+        // Set up form layout
         VBox formLayout = new VBox(
                 new Label("Name:"), nameField,
                 new Label("Age:"), ageField,
@@ -118,6 +127,7 @@ public class TestSystem extends Application {
                 new Label("Devil Fruit name:"), fruitNameField
         );
 
+        // Set up root layout with form, buttons, and gif
         VBox rootLayout = new VBox(formLayout, root, root2, gifPane);
         rootLayout.setStyle("-fx-background-color: lightblue;");
         VBox.setMargin(gifPane, new Insets(-50, 100, 200, 200));
@@ -129,6 +139,7 @@ public class TestSystem extends Application {
         introStage.show();
     }
 
+    // Display crew member images and details
     private void displayImage() {
         HBox layout = new HBox();
 
@@ -142,6 +153,7 @@ public class TestSystem extends Application {
             Image image = null;
             AudioClip tone = null;
 
+            // Set appropriate image and audio based on crew member name
             if (name.contains("luffy")) {
                 image = new Image(getClass().getResourceAsStream("Image/luffy.png"));
                 tone = new AudioClip(getClass().getResource("Audio/luffyTheme.mp3").toString());
@@ -181,8 +193,8 @@ public class TestSystem extends Application {
         imageStage.show();
     }
 
+    // Handle image interaction (play audio on mouse press, print mouse position on drag)
     private void interaction(ImageView imageView, AudioClip audioClip) {
-
         imageView.setOnMousePressed((MouseEvent me) -> {
             audioClip.play();
         });
@@ -195,6 +207,7 @@ public class TestSystem extends Application {
         launch(args);
     }
 
+    // Validate crew member name
     private void validateCrewMemberName(String name) throws InvalidCrewMemberException {
         if (!(name.contains("luffy") || name.contains("sanji") || name.contains("zoro"))) {
             throw new InvalidCrewMemberException("Invalid crew member name. Please enter a valid name (Luffy, Sanji, or Zoro).");
